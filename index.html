@@ -8,14 +8,18 @@
     <!-- Page Title -->
     <title>ItsTooEC-Sports</title>
     
-    <!-- OPTIMIZATION: Preconnect to Google Fonts servers to speed up font loading. -->
+    <!-- OPTIMIZATION: Preconnect to Google Fonts and Cloudinary servers -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://res.cloudinary.com">
     
-    <!-- OPTIMIZATION: Load fonts directly and asynchronously. This is faster than @import. -->
-    <link href="https://fonts.googleapis.com/css2?family=Passero+One&family=Sansita+Swashed:wght@700&family=Lemon&family=Condiment&family=Overlock+SC&family=Rajdhani&family=Racing+Sans+One&family=Raleway:wght@300;400;700&family=Anton&display=swap" rel="stylesheet">
+    <!-- OPTIMIZATION: Preload the most critical font file (Anton for the hero text) -->
+    <link rel="preload" href="https://fonts.gstatic.com/s/anton/v25/1Ptgg87LROyAm3Kz-C8.woff2" as="font" type="font/woff2" crossorigin>
     
-    <!-- Favicon using an absolute CDN path to ensure it loads -->
+    <!-- OPTIMIZATION: Load fonts asynchronously to prevent render blocking -->
+    <link href="https://fonts.googleapis.com/css2?family=Passero+One&family=Sansita+Swashed:wght@700&family=Lemon&family=Condiment&family=Overlock+SC&family=Rajdhani&family=Racing+Sans+One&family=Raleway:wght@300;400;700&family=Anton&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+    
+    <!-- Favicon using an absolute CDN path -->
     <link rel="icon" href="https://res.cloudinary.com/dicyfv549/image/upload/w_64,f_auto,q_auto:good/v1753626069/v1438_46_bhsvbp.png" type="image/png">
     
     <!-- OPTIMIZATION: CRITICAL CSS -->
@@ -50,10 +54,13 @@
         .main-nav a { text-decoration: none; color: var(--text-dark); font-family: var(--font-subheading); font-size: 2rem; margin: 0 20px; transition: color 0.3s; }
         .menu-toggle { display: none; cursor: pointer; z-index: 1001; }
         .menu-toggle .bar { width: 30px; height: 3px; background-color: var(--text-dark); margin: 6px 0; transition: 0.4s; }
-        .hero { background: url('https://res.cloudinary.com/dicyfv549/image/upload/w_800,f_auto,q_auto:good/v1753626071/v1476_3_mkyuep.png') no-repeat center center; background-size: cover; min-height: 600px; padding-right: 5%; display: flex; align-items: center; justify-content: flex-end; }
+        .hero { background-image: url('https://res.cloudinary.com/dicyfv549/image/upload/w_480,f_auto,q_auto:good/v1753626071/v1476_3_mkyuep.png'); background-size: cover; background-position: center; min-height: 600px; padding-right: 5%; display: flex; align-items: center; justify-content: flex-end; }
         .hero-text { font-family: var(--font-display); font-size: 6rem; color: var(--primary-yellow); text-align: right; line-height: 1.1; text-shadow: 2px 2px 8px rgba(0,0,0,0.5); }
         
-        @media (min-width: 768px) {
+        @media (min-width: 481px) {
+            .hero { background-image: url('https://res.cloudinary.com/dicyfv549/image/upload/w_1024,f_auto,q_auto:good/v1753626071/v1476_3_mkyuep.png'); }
+        }
+        @media (min-width: 1025px) {
             .hero { background-image: url('https://res.cloudinary.com/dicyfv549/image/upload/w_1920,f_auto,q_auto:good/v1753626071/v1476_3_mkyuep.png'); }
         }
         @media (max-width: 1024px) {
@@ -89,8 +96,9 @@
         .player-card .player-name { font-family: var(--font-player-name); font-size: 2rem; color: var(--text-light); margin-bottom: 10px; }
         .player-card .player-tag { background-color: var(--primary-yellow); color: var(--text-dark); font-family: var(--font-tag); padding: 5px 15px; border-radius: 8px; display: inline-block; }
         .player-card .captain-tag { position: absolute; top: 350px; left: 25px; background-color: var(--primary-yellow); color: var(--text-dark); font-family: var(--font-tag); padding: 5px 20px; border-radius: 8px; font-size: 1.2rem; }
-        .player-card .player-image { width: 90%; height: 380px; border-radius: 10px; margin-top: 25px; margin-bottom: 15px; overflow: hidden; }
-        .player-card .player-image img { width: 100%; height: 100%; object-fit: cover; }
+        /* FIX: Replaced fixed height with aspect-ratio to maintain shape without cropping */
+        .player-card .player-image { width: 90%; aspect-ratio: 252 / 380; border-radius: 10px; margin-top: 25px; margin-bottom: 15px; overflow: hidden; }
+        .player-card .player-image img { width: 100%; height: 100%; object-fit: contain; }
         .homeground-image { border: 5px solid var(--primary-yellow); border-radius: 14px; height: 600px; width: 100%; background: url('https://res.cloudinary.com/dicyfv549/image/upload/w_1200,f_auto,q_auto:good/v1753626072/v1480_9_jpoata.jpg') no-repeat center center; background-size: cover; }
         .jersey-container { border: 5px solid var(--primary-yellow); border-radius: 18px; padding: 40px; display: flex; justify-content: center; gap: 5%; }
         .jersey-container picture { width: 40%; max-width: 480px; }
@@ -101,8 +109,9 @@
         .bottom-row .achievement-card { width: calc(33.33% - 10px); }
         .achievement-card { text-align: center; }
         .achievement-card .photo-frame { border: 5px solid var(--accent-blue); border-radius: 7px; padding: 10px; background-color: var(--primary-bg); margin-bottom: -50px; position: relative; z-index: 1; }
-        .achievement-card .photo-frame picture { width: 100%; height: 450px; border-radius: 7px; overflow: hidden; display: block; }
-        .achievement-card .photo-frame img { width: 100%; height: 100%; object-fit: cover; }
+        /* FIX: Replaced fixed height with aspect-ratio to maintain shape without cropping */
+        .achievement-card .photo-frame picture { width: 100%; aspect-ratio: 400 / 450; border-radius: 7px; overflow: hidden; display: block; }
+        .achievement-card .photo-frame img { width: 100%; height: 100%; object-fit: contain; }
         .achievement-card .name-plate { background-color: var(--primary-yellow); color: var(--text-dark); font-family: var(--font-achievement); font-size: 2.5rem; padding: 10px 30px; border-radius: 15px; transform: rotate(-10deg); display: inline-block; position: relative; z-index: 2; }
         .achievement-card .achievements-list { list-style: none; padding-top: 20px; }
         .achievement-card .achievements-list li { font-family: 'Juice ITC', sans-serif; font-size: 2rem; color: var(--text-light); margin-bottom: 5px; }
@@ -143,8 +152,9 @@
         .news-section { margin-top: 150px; }
         .news-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 40px; }
         .news-card { background-color: var(--primary-yellow); overflow: hidden; }
-        .news-card picture { width: 100%; height: 350px; }
-        .news-card img { width: 100%; height: 100%; object-fit: cover; }
+        /* FIX: Replaced fixed height with aspect-ratio to maintain shape without cropping */
+        .news-card picture { width: 100%; aspect-ratio: 400 / 350; }
+        .news-card img { width: 100%; height: 100%; object-fit: contain; }
         .news-card .caption { padding: 20px; color: var(--text-dark); font-family: var(--font-news); font-size: 1.5rem; text-align: center; }
         .stronger-together-section { padding: 40px 0; text-align: center; }
         .marquee-container { max-width: 40%; margin: 0 auto; overflow: hidden; white-space: nowrap; }
@@ -238,7 +248,8 @@
                 <div class="player-card">
                     <div class="player-image">
                         <picture>
-                           <source media="(max-width: 767px)" srcset="https://res.cloudinary.com/dicyfv549/image/upload/w_252,h_380,c_fill,f_auto,q_auto:good/v1753626071/v1438_77_t2elle.png">
+                           <source type="image/avif" srcset="https://res.cloudinary.com/dicyfv549/image/upload/w_252,h_380,c_fill,f_avif,q_auto:good/v1753626071/v1438_77_t2elle.png">
+                           <source type="image/webp" srcset="https://res.cloudinary.com/dicyfv549/image/upload/w_252,h_380,c_fill,f_webp,q_auto:good/v1753626071/v1438_77_t2elle.png">
                            <img src="https://res.cloudinary.com/dicyfv549/image/upload/w_252,h_380,c_fill,f_auto,q_auto:good/v1753626071/v1438_77_t2elle.png" alt="Player Zayed Zubair" loading="lazy" decoding="async">
                         </picture>
                     </div>
@@ -247,11 +258,12 @@
                     <h3 class="player-name">Zayed Zubair</h3>
                     <span class="player-tag">Cricket</span>
                 </div>
-                <!-- ... Repeat for all player cards ... -->
+                <!-- ... All other player cards updated with AVIF and WebP sources ... -->
                 <div class="player-card">
                     <div class="player-image">
                         <picture>
-                           <source media="(max-width: 767px)" srcset="https://res.cloudinary.com/dicyfv549/image/upload/w_252,h_380,c_fill,f_auto,q_auto:good/v1753626071/v1438_86_k5dopk.png">
+                           <source type="image/avif" srcset="https://res.cloudinary.com/dicyfv549/image/upload/w_252,h_380,c_fill,f_avif,q_auto:good/v1753626071/v1438_86_k5dopk.png">
+                           <source type="image/webp" srcset="https://res.cloudinary.com/dicyfv549/image/upload/w_252,h_380,c_fill,f_webp,q_auto:good/v1753626071/v1438_86_k5dopk.png">
                            <img src="https://res.cloudinary.com/dicyfv549/image/upload/w_252,h_380,c_fill,f_auto,q_auto:good/v1753626071/v1438_86_k5dopk.png" alt="Player Rizzwan" loading="lazy" decoding="async">
                         </picture>
                     </div>
@@ -263,7 +275,8 @@
                  <div class="player-card">
                     <div class="player-image">
                         <picture>
-                           <source media="(max-width: 767px)" srcset="https://res.cloudinary.com/dicyfv549/image/upload/w_252,h_380,c_fill,f_auto,q_auto:good/v1753626071/v1438_98_gekrb1.png">
+                           <source type="image/avif" srcset="https://res.cloudinary.com/dicyfv549/image/upload/w_252,h_380,c_fill,f_avif,q_auto:good/v1753626071/v1438_98_gekrb1.png">
+                           <source type="image/webp" srcset="https://res.cloudinary.com/dicyfv549/image/upload/w_252,h_380,c_fill,f_webp,q_auto:good/v1753626071/v1438_98_gekrb1.png">
                            <img src="https://res.cloudinary.com/dicyfv549/image/upload/w_252,h_380,c_fill,f_auto,q_auto:good/v1753626071/v1438_98_gekrb1.png" alt="Player Sarang Ullas" loading="lazy" decoding="async">
                         </picture>
                     </div>
@@ -274,7 +287,8 @@
                  <div class="player-card">
                     <div class="player-image">
                         <picture>
-                           <source media="(max-width: 767px)" srcset="https://res.cloudinary.com/dicyfv549/image/upload/w_252,h_380,c_fill,f_auto,q_auto:good/v1753626070/v1438_67_buwuzm.png">
+                           <source type="image/avif" srcset="https://res.cloudinary.com/dicyfv549/image/upload/w_252,h_380,c_fill,f_avif,q_auto:good/v1753626070/v1438_67_buwuzm.png">
+                           <source type="image/webp" srcset="https://res.cloudinary.com/dicyfv549/image/upload/w_252,h_380,c_fill,f_webp,q_auto:good/v1753626070/v1438_67_buwuzm.png">
                            <img src="https://res.cloudinary.com/dicyfv549/image/upload/w_252,h_380,c_fill,f_auto,q_auto:good/v1753626070/v1438_67_buwuzm.png" alt="Player Vedas" loading="lazy" decoding="async">
                         </picture>
                     </div>
@@ -285,7 +299,8 @@
                  <div class="player-card">
                     <div class="player-image">
                         <picture>
-                           <source media="(max-width: 767px)" srcset="https://res.cloudinary.com/dicyfv549/image/upload/w_252,h_380,c_fill,f_auto,q_auto:good/v1753626067/v1438_119_tvt1y4.png">
+                           <source type="image/avif" srcset="https://res.cloudinary.com/dicyfv549/image/upload/w_252,h_380,c_fill,f_avif,q_auto:good/v1753626067/v1438_119_tvt1y4.png">
+                           <source type="image/webp" srcset="https://res.cloudinary.com/dicyfv549/image/upload/w_252,h_380,c_fill,f_webp,q_auto:good/v1753626067/v1438_119_tvt1y4.png">
                            <img src="https://res.cloudinary.com/dicyfv549/image/upload/w_252,h_380,c_fill,f_auto,q_auto:good/v1753626067/v1438_119_tvt1y4.png" alt="Player Shivanandh" loading="lazy" decoding="async">
                         </picture>
                     </div>
@@ -296,7 +311,8 @@
                  <div class="player-card">
                     <div class="player-image">
                         <picture>
-                           <source media="(max-width: 767px)" srcset="https://res.cloudinary.com/dicyfv549/image/upload/w_252,h_380,c_fill,f_auto,q_auto:good/v1753626067/v1438_213_vwh3sy.png">
+                           <source type="image/avif" srcset="https://res.cloudinary.com/dicyfv549/image/upload/w_252,h_380,c_fill,f_avif,q_auto:good/v1753626067/v1438_213_vwh3sy.png">
+                           <source type="image/webp" srcset="https://res.cloudinary.com/dicyfv549/image/upload/w_252,h_380,c_fill,f_webp,q_auto:good/v1753626067/v1438_213_vwh3sy.png">
                            <img src="https://res.cloudinary.com/dicyfv549/image/upload/w_252,h_380,c_fill,f_auto,q_auto:good/v1753626067/v1438_213_vwh3sy.png" alt="Player Maanas" loading="lazy" decoding="async">
                         </picture>
                     </div>
@@ -307,7 +323,8 @@
                  <div class="player-card">
                     <div class="player-image">
                         <picture>
-                           <source media="(max-width: 767px)" srcset="https://res.cloudinary.com/dicyfv549/image/upload/w_252,h_380,c_fill,f_auto,q_auto:good/v1753626068/v1438_148_e7pgkg.png">
+                           <source type="image/avif" srcset="https://res.cloudinary.com/dicyfv549/image/upload/w_252,h_380,c_fill,f_avif,q_auto:good/v1753626068/v1438_148_e7pgkg.png">
+                           <source type="image/webp" srcset="https://res.cloudinary.com/dicyfv549/image/upload/w_252,h_380,c_fill,f_webp,q_auto:good/v1753626068/v1438_148_e7pgkg.png">
                            <img src="https://res.cloudinary.com/dicyfv549/image/upload/w_252,h_380,c_fill,f_auto,q_auto:good/v1753626068/v1438_148_e7pgkg.png" alt="Player Rithin raj" loading="lazy" decoding="async">
                         </picture>
                     </div>
@@ -318,7 +335,8 @@
                  <div class="player-card">
                     <div class="player-image">
                         <picture>
-                           <source media="(max-width: 767px)" srcset="https://res.cloudinary.com/dicyfv549/image/upload/w_252,h_380,c_fill,f_auto,q_auto:good/v1753626068/v1438_135_yjicgp.png">
+                           <source type="image/avif" srcset="https://res.cloudinary.com/dicyfv549/image/upload/w_252,h_380,c_fill,f_avif,q_auto:good/v1753626068/v1438_135_yjicgp.png">
+                           <source type="image/webp" srcset="https://res.cloudinary.com/dicyfv549/image/upload/w_252,h_380,c_fill,f_webp,q_auto:good/v1753626068/v1438_135_yjicgp.png">
                            <img src="https://res.cloudinary.com/dicyfv549/image/upload/w_252,h_380,c_fill,f_auto,q_auto:good/v1753626068/v1438_135_yjicgp.png" alt="Player Pranav" loading="lazy" decoding="async">
                         </picture>
                     </div>
@@ -329,7 +347,8 @@
                  <div class="player-card">
                     <div class="player-image">
                         <picture>
-                           <source media="(max-width: 767px)" srcset="https://res.cloudinary.com/dicyfv549/image/upload/w_252,h_380,c_fill,f_auto,q_auto:good/v1753626068/v1438_157_ses7da.png">
+                           <source type="image/avif" srcset="https://res.cloudinary.com/dicyfv549/image/upload/w_252,h_380,c_fill,f_avif,q_auto:good/v1753626068/v1438_157_ses7da.png">
+                           <source type="image/webp" srcset="https://res.cloudinary.com/dicyfv549/image/upload/w_252,h_380,c_fill,f_webp,q_auto:good/v1753626068/v1438_157_ses7da.png">
                            <img src="https://res.cloudinary.com/dicyfv549/image/upload/w_252,h_380,c_fill,f_auto,q_auto:good/v1753626068/v1438_157_ses7da.png" alt="Player Rishikesh" loading="lazy" decoding="async">
                         </picture>
                     </div>
@@ -340,7 +359,8 @@
                  <div class="player-card">
                     <div class="player-image">
                         <picture>
-                           <source media="(max-width: 767px)" srcset="https://res.cloudinary.com/dicyfv549/image/upload/w_252,h_380,c_fill,f_auto,q_auto:good/v1753626069/v1438_164_lbbqaq.png">
+                           <source type="image/avif" srcset="https://res.cloudinary.com/dicyfv549/image/upload/w_252,h_380,c_fill,f_avif,q_auto:good/v1753626069/v1438_164_lbbqaq.png">
+                           <source type="image/webp" srcset="https://res.cloudinary.com/dicyfv549/image/upload/w_252,h_380,c_fill,f_webp,q_auto:good/v1753626069/v1438_164_lbbqaq.png">
                            <img src="https://res.cloudinary.com/dicyfv549/image/upload/w_252,h_380,c_fill,f_auto,q_auto:good/v1753626069/v1438_164_lbbqaq.png" alt="Player Shanu" loading="lazy" decoding="async">
                         </picture>
                     </div>
@@ -351,7 +371,8 @@
                  <div class="player-card">
                     <div class="player-image">
                         <picture>
-                           <source media="(max-width: 767px)" srcset="https://res.cloudinary.com/dicyfv549/image/upload/w_252,h_380,c_fill,f_auto,q_auto:good/v1753626067/v1438_108_aymjiu.png">
+                           <source type="image/avif" srcset="https://res.cloudinary.com/dicyfv549/image/upload/w_252,h_380,c_fill,f_avif,q_auto:good/v1753626067/v1438_108_aymjiu.png">
+                           <source type="image/webp" srcset="https://res.cloudinary.com/dicyfv549/image/upload/w_252,h_380,c_fill,f_webp,q_auto:good/v1753626067/v1438_108_aymjiu.png">
                            <img src="https://res.cloudinary.com/dicyfv549/image/upload/w_252,h_380,c_fill,f_auto,q_auto:good/v1753626067/v1438_108_aymjiu.png" alt="Player Yadhu" loading="lazy" decoding="async">
                         </picture>
                     </div>
@@ -362,7 +383,8 @@
                  <div class="player-card">
                     <div class="player-image">
                         <picture>
-                           <source media="(max-width: 767px)" srcset="https://res.cloudinary.com/dicyfv549/image/upload/w_252,h_380,c_fill,f_auto,q_auto:good/v1753626070/v1438_185_baonr3.png">
+                           <source type="image/avif" srcset="https://res.cloudinary.com/dicyfv549/image/upload/w_252,h_380,c_fill,f_avif,q_auto:good/v1753626070/v1438_185_baonr3.png">
+                           <source type="image/webp" srcset="https://res.cloudinary.com/dicyfv549/image/upload/w_252,h_380,c_fill,f_webp,q_auto:good/v1753626070/v1438_185_baonr3.png">
                            <img src="https://res.cloudinary.com/dicyfv549/image/upload/w_252,h_380,c_fill,f_auto,q_auto:good/v1753626070/v1438_185_baonr3.png" alt="Player Sanju" loading="lazy" decoding="async">
                         </picture>
                     </div>
@@ -373,7 +395,8 @@
                  <div class="player-card">
                     <div class="player-image">
                         <picture>
-                           <source media="(max-width: 767px)" srcset="https://res.cloudinary.com/dicyfv549/image/upload/w_252,h_380,c_fill,f_auto,q_auto:good/v1753626067/v1438_128_qwykit.png">
+                           <source type="image/avif" srcset="https://res.cloudinary.com/dicyfv549/image/upload/w_252,h_380,c_fill,f_avif,q_auto:good/v1753626067/v1438_128_qwykit.png">
+                           <source type="image/webp" srcset="https://res.cloudinary.com/dicyfv549/image/upload/w_252,h_380,c_fill,f_webp,q_auto:good/v1753626067/v1438_128_qwykit.png">
                            <img src="https://res.cloudinary.com/dicyfv549/image/upload/w_252,h_380,c_fill,f_auto,q_auto:good/v1753626067/v1438_128_qwykit.png" alt="Player Navjyot" loading="lazy" decoding="async">
                         </picture>
                     </div>
@@ -384,7 +407,8 @@
                  <div class="player-card">
                     <div class="player-image">
                         <picture>
-                           <source media="(max-width: 767px)" srcset="https://res.cloudinary.com/dicyfv549/image/upload/w_252,h_380,c_fill,f_auto,q_auto:good/v1753626066/v1438_204_n9wxnc.png">
+                           <source type="image/avif" srcset="https://res.cloudinary.com/dicyfv549/image/upload/w_252,h_380,c_fill,f_avif,q_auto:good/v1753626066/v1438_204_n9wxnc.png">
+                           <source type="image/webp" srcset="https://res.cloudinary.com/dicyfv549/image/upload/w_252,h_380,c_fill,f_webp,q_auto:good/v1753626066/v1438_204_n9wxnc.png">
                            <img src="https://res.cloudinary.com/dicyfv549/image/upload/w_252,h_380,c_fill,f_auto,q_auto:good/v1753626066/v1438_204_n9wxnc.png" alt="Player Samrudh" loading="lazy" decoding="async">
                         </picture>
                     </div>
@@ -395,7 +419,8 @@
                  <div class="player-card">
                     <div class="player-image">
                         <picture>
-                           <source media="(max-width: 767px)" srcset="https://res.cloudinary.com/dicyfv549/image/upload/w_252,h_380,c_fill,f_auto,q_auto:good/v1753626066/v1438_192_xyjbhx.png">
+                           <source type="image/avif" srcset="https://res.cloudinary.com/dicyfv549/image/upload/w_252,h_380,c_fill,f_avif,q_auto:good/v1753626066/v1438_192_xyjbhx.png">
+                           <source type="image/webp" srcset="https://res.cloudinary.com/dicyfv549/image/upload/w_252,h_380,c_fill,f_webp,q_auto:good/v1753626066/v1438_192_xyjbhx.png">
                            <img src="https://res.cloudinary.com/dicyfv549/image/upload/w_252,h_380,c_fill,f_auto,q_auto:good/v1753626066/v1438_192_xyjbhx.png" alt="Player Satheerth" loading="lazy" decoding="async">
                         </picture>
                     </div>
@@ -406,7 +431,8 @@
                  <div class="player-card">
                     <div class="player-image">
                         <picture>
-                           <source media="(max-width: 767px)" srcset="https://res.cloudinary.com/dicyfv549/image/upload/w_252,h_380,c_fill,f_auto,q_auto:good/v1753626070/v1438_176_a6wfif.png">
+                           <source type="image/avif" srcset="https://res.cloudinary.com/dicyfv549/image/upload/w_252,h_380,c_fill,f_avif,q_auto:good/v1753626070/v1438_176_a6wfif.png">
+                           <source type="image/webp" srcset="https://res.cloudinary.com/dicyfv549/image/upload/w_252,h_380,c_fill,f_webp,q_auto:good/v1753626070/v1438_176_a6wfif.png">
                            <img src="https://res.cloudinary.com/dicyfv549/image/upload/w_252,h_380,c_fill,f_auto,q_auto:good/v1753626070/v1753626070/v1438_176_a6wfif.png" alt="Player Nived" loading="lazy" decoding="async">
                         </picture>
                     </div>
@@ -417,7 +443,8 @@
                  <div class="player-card">
                     <div class="player-image">
                         <picture>
-                           <source media="(max-width: 767px)" srcset="https://res.cloudinary.com/dicyfv549/image/upload/w_252,h_380,c_fill,f_auto,q_auto:good/v1753626068/v1438_222_dkg61x.png">
+                           <source type="image/avif" srcset="https://res.cloudinary.com/dicyfv549/image/upload/w_252,h_380,c_fill,f_avif,q_auto:good/v1753626068/v1438_222_dkg61x.png">
+                           <source type="image/webp" srcset="https://res.cloudinary.com/dicyfv549/image/upload/w_252,h_380,c_fill,f_webp,q_auto:good/v1753626068/v1438_222_dkg61x.png">
                            <img src="https://res.cloudinary.com/dicyfv549/image/upload/w_252,h_380,c_fill,f_auto,q_auto:good/v1753626068/v1438_222_dkg61x.png" alt="Player Umer" loading="lazy" decoding="async">
                         </picture>
                     </div>
@@ -428,7 +455,8 @@
                  <div class="player-card">
                     <div class="player-image">
                         <picture>
-                           <source media="(max-width: 767px)" srcset="https://res.cloudinary.com/dicyfv549/image/upload/w_252,h_380,c_fill,f_auto,q_auto:good/v1753626069/v1438_235_eabrxh.png">
+                           <source type="image/avif" srcset="https://res.cloudinary.com/dicyfv549/image/upload/w_252,h_380,c_fill,f_avif,q_auto:good/v1753626069/v1438_235_eabrxh.png">
+                           <source type="image/webp" srcset="https://res.cloudinary.com/dicyfv549/image/upload/w_252,h_380,c_fill,f_webp,q_auto:good/v1753626069/v1438_235_eabrxh.png">
                            <img src="https://res.cloudinary.com/dicyfv549/image/upload/w_252,h_380,c_fill,f_auto,q_auto:good/v1753626069/v1438_235_eabrxh.png" alt="Player Yadhu krishna M" loading="lazy" decoding="async">
                         </picture>
                     </div>
@@ -448,11 +476,13 @@
             <h2 class="section-title blue">Our Jersey</h2>
             <div class="jersey-container">
                 <picture>
-                   <source media="(max-width: 767px)" srcset="https://res.cloudinary.com/dicyfv549/image/upload/w_400,f_auto,q_auto:good/v1753626071/v1480_15_asvzg3.png">
+                   <source type="image/avif" srcset="https://res.cloudinary.com/dicyfv549/image/upload/w_400,f_avif,q_auto:good/v1753626071/v1480_15_asvzg3.png">
+                   <source type="image/webp" srcset="https://res.cloudinary.com/dicyfv549/image/upload/w_400,f_webp,q_auto:good/v1753626071/v1480_15_asvzg3.png">
                    <img src="https://res.cloudinary.com/dicyfv549/image/upload/w_480,f_auto,q_auto:good/v1753626071/v1480_15_asvzg3.png" alt="Home Jersey" loading="lazy" decoding="async">
                 </picture>
                 <picture>
-                   <source media="(max-width: 767px)" srcset="https://res.cloudinary.com/dicyfv549/image/upload/w_400,f_auto,q_auto:good/v1753626072/v1487_35_fysfek.png">
+                   <source type="image/avif" srcset="https://res.cloudinary.com/dicyfv549/image/upload/w_400,f_avif,q_auto:good/v1753626072/v1487_35_fysfek.png">
+                   <source type="image/webp" srcset="https://res.cloudinary.com/dicyfv549/image/upload/w_400,f_webp,q_auto:good/v1753626072/v1487_35_fysfek.png">
                    <img src="https://res.cloudinary.com/dicyfv549/image/upload/w_480,f_auto,q_auto:good/v1753626072/v1487_35_fysfek.png" alt="Away Jersey" loading="lazy" decoding="async">
                 </picture>
             </div>
@@ -464,7 +494,8 @@
                 <div class="achievement-card">
                     <div class="photo-frame">
                         <picture>
-                           <source media="(max-width: 767px)" srcset="https://res.cloudinary.com/dicyfv549/image/upload/w_300,h_338,c_fill,f_auto,q_auto:good/v1753626095/v1527_9_suazxf.png">
+                           <source type="image/avif" srcset="https://res.cloudinary.com/dicyfv549/image/upload/w_300,h_338,c_fill,f_avif,q_auto:good/v1753626095/v1527_9_suazxf.png">
+                           <source type="image/webp" srcset="https://res.cloudinary.com/dicyfv549/image/upload/w_300,h_338,c_fill,f_webp,q_auto:good/v1753626095/v1527_9_suazxf.png">
                            <img src="https://res.cloudinary.com/dicyfv549/image/upload/w_400,h_450,c_fill,f_auto,q_auto:good/v1753626095/v1527_9_suazxf.png" alt="Vedas Achievement" loading="lazy" decoding="async">
                         </picture>
                     </div>
@@ -477,7 +508,8 @@
                 <div class="achievement-card">
                     <div class="photo-frame">
                         <picture>
-                           <source media="(max-width: 767px)" srcset="https://res.cloudinary.com/dicyfv549/image/upload/w_300,h_338,c_fill,f_auto,q_auto:good/v1753626072/v1517_6_hj4o0m.png">
+                           <source type="image/avif" srcset="https://res.cloudinary.com/dicyfv549/image/upload/w_300,h_338,c_fill,f_avif,q_auto:good/v1753626072/v1517_6_hj4o0m.png">
+                           <source type="image/webp" srcset="https://res.cloudinary.com/dicyfv549/image/upload/w_300,h_338,c_fill,f_webp,q_auto:good/v1753626072/v1517_6_hj4o0m.png">
                            <img src="https://res.cloudinary.com/dicyfv549/image/upload/w_400,h_450,c_fill,f_auto,q_auto:good/v1753626072/v1517_6_hj4o0m.png" alt="Vyshna Achievement" loading="lazy" decoding="async">
                         </picture>
                     </div>
@@ -489,7 +521,8 @@
                 <div class="achievement-card">
                     <div class="photo-frame">
                         <picture>
-                           <source media="(max-width: 767px)" srcset="https://res.cloudinary.com/dicyfv549/image/upload/w_300,h_338,c_fill,f_auto,q_auto:good/v1753626072/v1492_47_d0xuto.png">
+                           <source type="image/avif" srcset="https://res.cloudinary.com/dicyfv549/image/upload/w_300,h_338,c_fill,f_avif,q_auto:good/v1753626072/v1492_47_d0xuto.png">
+                           <source type="image/webp" srcset="https://res.cloudinary.com/dicyfv549/image/upload/w_300,h_338,c_fill,f_webp,q_auto:good/v1753626072/v1492_47_d0xuto.png">
                            <img src="https://res.cloudinary.com/dicyfv549/image/upload/w_400,h_450,c_fill,f_auto,q_auto:good/v1753626072/v1492_47_d0xuto.png" alt="Zayed Zubair Achievement" loading="lazy" decoding="async">
                         </picture>
                     </div>
@@ -503,7 +536,8 @@
                     <div class="achievement-card">
                         <div class="photo-frame">
                             <picture>
-                               <source media="(max-width: 767px)" srcset="https://res.cloudinary.com/dicyfv549/image/upload/w_300,h_338,c_fill,f_auto,q_auto:good/v1753626072/v1527_14_u4pyld.png">
+                               <source type="image/avif" srcset="https://res.cloudinary.com/dicyfv549/image/upload/w_300,h_338,c_fill,f_avif,q_auto:good/v1753626072/v1527_14_u4pyld.png">
+                               <source type="image/webp" srcset="https://res.cloudinary.com/dicyfv549/image/upload/w_300,h_338,c_fill,f_webp,q_auto:good/v1753626072/v1527_14_u4pyld.png">
                                <img src="https://res.cloudinary.com/dicyfv549/image/upload/w_400,h_450,c_fill,f_auto,q_auto:good/v1753626072/v1527_14_u4pyld.png" alt="Navajyoth Achievement" loading="lazy" decoding="async">
                             </picture>
                         </div>
@@ -515,7 +549,8 @@
                     <div class="achievement-card">
                         <div class="photo-frame">
                             <picture>
-                               <source media="(max-width: 767px)" srcset="https://res.cloudinary.com/dicyfv549/image/upload/w_300,h_338,c_fill,f_auto,q_auto:good/v1753626072/v1527_18_whidl2.png">
+                               <source type="image/avif" srcset="https://res.cloudinary.com/dicyfv549/image/upload/w_300,h_338,c_fill,f_avif,q_auto:good/v1753626072/v1527_18_whidl2.png">
+                               <source type="image/webp" srcset="https://res.cloudinary.com/dicyfv549/image/upload/w_300,h_338,c_fill,f_webp,q_auto:good/v1753626072/v1527_18_whidl2.png">
                                <img src="https://res.cloudinary.com/dicyfv549/image/upload/w_400,h_450,c_fill,f_auto,q_auto:good/v1753626072/v1527_18_whidl2.png" alt="Pavithra Achievement" loading="lazy" decoding="async">
                             </picture>
                         </div>
@@ -579,42 +614,48 @@
             <div class="news-grid">
                 <div class="news-card">
                     <picture>
-                       <source media="(max-width: 767px)" srcset="https://res.cloudinary.com/dicyfv549/image/upload/w_400,h_350,c_fill,f_auto,q_auto:good/v1753626072/v1493_2_c7ed8p.jpg">
+                       <source type="image/avif" srcset="https://res.cloudinary.com/dicyfv549/image/upload/w_400,h_350,c_fill,f_avif,q_auto:good/v1753626072/v1493_2_c7ed8p.jpg">
+                       <source type="image/webp" srcset="https://res.cloudinary.com/dicyfv549/image/upload/w_400,h_350,c_fill,f_webp,q_auto:good/v1753626072/v1493_2_c7ed8p.jpg">
                        <img src="https://res.cloudinary.com/dicyfv549/image/upload/w_400,h_350,c_fill,f_auto,q_auto:good/v1753626072/v1493_2_c7ed8p.jpg" alt="News Image 1" loading="lazy" decoding="async">
                     </picture>
                     <p class="caption">TOO EC UNVEILS JERSEYS FOR 2025-26 SESON</p>
                 </div>
                 <div class="news-card">
                     <picture>
-                       <source media="(max-width: 767px)" srcset="https://res.cloudinary.com/dicyfv549/image/upload/w_400,h_350,c_fill,f_auto,q_auto:good/v1753626073/v1527_36_aijczw.png">
+                       <source type="image/avif" srcset="https://res.cloudinary.com/dicyfv549/image/upload/w_400,h_350,c_fill,f_avif,q_auto:good/v1753626073/v1527_36_aijczw.png">
+                       <source type="image/webp" srcset="https://res.cloudinary.com/dicyfv549/image/upload/w_400,h_350,c_fill,f_webp,q_auto:good/v1753626073/v1527_36_aijczw.png">
                        <img src="https://res.cloudinary.com/dicyfv549/image/upload/w_400,h_350,c_fill,f_auto,q_auto:good/v1753626073/v1527_36_aijczw.png" alt="News Image 2" loading="lazy" decoding="async">
                     </picture>
                     <p class="caption">TOO EC PLAYERS AT ECL 2024</p>
                 </div>
                 <div class="news-card">
                     <picture>
-                       <source media="(max-width: 767px)" srcset="https://res.cloudinary.com/dicyfv549/image/upload/w_400,h_350,c_fill,f_auto,q_auto:good/v1753626073/v1527_39_jesex9.png">
+                       <source type="image/avif" srcset="https://res.cloudinary.com/dicyfv549/image/upload/w_400,h_350,c_fill,f_avif,q_auto:good/v1753626073/v1527_39_jesex9.png">
+                       <source type="image/webp" srcset="https://res.cloudinary.com/dicyfv549/image/upload/w_400,h_350,c_fill,f_webp,q_auto:good/v1753626073/v1527_39_jesex9.png">
                        <img src="https://res.cloudinary.com/dicyfv549/image/upload/w_400,h_350,c_fill,f_auto,q_auto:good/v1753626073/v1527_39_jesex9.png" alt="News Image 3" loading="lazy" decoding="async">
                     </picture>
                     <p class="caption">VEDAS RECIEVES M.O.M MEDAL FROM ANAS SIR</p>
                 </div>
                 <div class="news-card">
                     <picture>
-                       <source media="(max-width: 767px)" srcset="https://res.cloudinary.com/dicyfv549/image/upload/w_400,h_350,c_fill,f_auto,q_auto:good/v1753626080/v1527_47_uu63ix.png">
+                       <source type="image/avif" srcset="https://res.cloudinary.com/dicyfv549/image/upload/w_400,h_350,c_fill,f_avif,q_auto:good/v1753626080/v1527_47_uu63ix.png">
+                       <source type="image/webp" srcset="https://res.cloudinary.com/dicyfv549/image/upload/w_400,h_350,c_fill,f_webp,q_auto:good/v1753626080/v1527_47_uu63ix.png">
                        <img src="https://res.cloudinary.com/dicyfv549/image/upload/w_400,h_350,c_fill,f_auto,q_auto:good/v1753626080/v1527_47_uu63ix.png" alt="News Image 4" loading="lazy" decoding="async">
                     </picture>
                     <p class="caption">TOO EC PLAYERS AT EPL 2025 OPENING CEROMONY</p>
                 </div>
                 <div class="news-card">
                     <picture>
-                       <source media="(max-width: 767px)" srcset="https://res.cloudinary.com/dicyfv549/image/upload/w_400,h_350,c_fill,f_auto,q_auto:good/v1753626095/v1527_62_edbu0c.png">
+                       <source type="image/avif" srcset="https://res.cloudinary.com/dicyfv549/image/upload/w_400,h_350,c_fill,f_avif,q_auto:good/v1753626095/v1527_62_edbu0c.png">
+                       <source type="image/webp" srcset="https://res.cloudinary.com/dicyfv549/image/upload/w_400,h_350,c_fill,f_webp,q_auto:good/v1753626095/v1527_62_edbu0c.png">
                        <img src="https://res.cloudinary.com/dicyfv549/image/upload/w_400,h_350,c_fill,f_auto,q_auto:good/v1753626095/v1527_62_edbu0c.png" alt="News Image 5" loading="lazy" decoding="async">
                     </picture>
                     <p class="caption">ZAYED, VEDAS BECOMES CHAMPIONS ON F-ZONE DEBUT</p>
                 </div>
                 <div class="news-card">
                     <picture>
-                       <source media="(max-width: 767px)" srcset="https://res.cloudinary.com/dicyfv549/image/upload/w_400,h_350,c_fill,f_auto,q_auto:good/v1753626095/v1528_65_vik8mh.png">
+                       <source type="image/avif" srcset="https://res.cloudinary.com/dicyfv549/image/upload/w_400,h_350,c_fill,f_avif,q_auto:good/v1753626095/v1528_65_vik8mh.png">
+                       <source type="image/webp" srcset="https://res.cloudinary.com/dicyfv549/image/upload/w_400,h_350,c_fill,f_webp,q_auto:good/v1753626095/v1528_65_vik8mh.png">
                        <img src="https://res.cloudinary.com/dicyfv549/image/upload/w_400,h_350,c_fill,f_auto,q_auto:good/v1753626095/v1528_65_vik8mh.png" alt="News Image 6" loading="lazy" decoding="async">
                     </picture>
                     <p class="caption">PLAYERS AT ECL 2024</p>
